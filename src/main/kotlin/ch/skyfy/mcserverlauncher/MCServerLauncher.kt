@@ -238,6 +238,7 @@ class MCServerLauncher {
         private val folderStructure: Folder = Folder("myServer")
             .then(Folder("launcher"))
             .then(Folder("server"))
+            .then(Folder("java"))
 
 
         /**
@@ -417,6 +418,7 @@ class MCServerLauncher {
             memories: Set<String> = MEMORIES,
             fabricLoaderVersion: String = FABRICMC_LOADER_VERSION.first(),
             fabricInstallerVersion: String = FABRICMC_INSTALLER_VERSION.first(),
+            embedJava: Boolean = false
         ) {
             // Create a folder called with the name of the minecraft version in the rootFolder
             // Example: rootFolder = C:\temp\all-servers, so a folder called C:\temp\all-servers\1.19.3 will appear
@@ -449,6 +451,8 @@ class MCServerLauncher {
                     return@first
                 }
 
+                downloadAndExtractAllJava(fs.getRoot(versionFolder), java)
+
 //                val launcherFolder = fs.getFolder("launcher", versionFolder)!!
 //                javaLauncherFolder = launcherFolder.resolve(java.name)
 
@@ -456,7 +460,9 @@ class MCServerLauncher {
                 flags.forEach second@{ flag ->
                     if (flag == Flag.BASICS) return@second
 
-                    val javaExec = findPathToJavaExe(java.filename.substringBeforeLast("."))
+                    var javaExec = findPathToJavaExe(java.filename.substringBeforeLast("."))
+                    if(embedJava)
+                        javaExec = findPathToJavaExe(java.filename.substringBeforeLast("."), fs.getRoot(versionFolder))
 
                     // And finally we also create a specific start.bat foreach different memory profile (2GB, 4GB, etc.)
                     memories.forEach third@{ mem ->
@@ -506,14 +512,14 @@ class MCServerLauncher {
 //                    filterByVersionType(mcVersion, VersionType.EXPERIMENTAL)
 //                    filterByVersionType(mcVersion, VersionType.OTHER)
                 }
-                .forEach { mcVersion -> generateSingleFabricMCServer(rootFolder, mcVersion) }
+                .forEach { mcVersion -> generateSingleFabricMCServer(rootFolder, mcVersion, embedJava = true) }
 
 //            startAllFabricMCServer(rootFolder)
 //            copyDefaultFabricMCServerToResources(rootFolder)
         }
 
-        fun findPathToJavaExe(javaOriginalName: String): Path {
-            val p = APPLICATION_DIR.resolve("java").resolve(javaOriginalName)
+        fun findPathToJavaExe(javaOriginalName: String, path: Path = APPLICATION_DIR): Path {
+            val p = path.resolve("java").resolve(javaOriginalName)
             if (p.exists()) {
                 p.toFile().walk(FileWalkDirection.TOP_DOWN).onEnter {
                     return@onEnter true
@@ -532,10 +538,13 @@ class MCServerLauncher {
             }
         }
 
-        private fun downloadAndExtractAllJava() {
-            val javaFolder = APPLICATION_DIR.resolve("java")
+        private fun downloadAndExtractAllJava(path: Path = APPLICATION_DIR, specificJava: Java? = null) {
+            val javaFolder = path.resolve("java")
             if (javaFolder.notExists()) javaFolder.createDirectory()
-            Java.values().forEach { j ->
+
+            val javaList = if(specificJava == null)  Java.values() else arrayOf(specificJava)
+
+            javaList.forEach { j ->
                 Thread.currentThread().contextClassLoader.getResource("java/${j.filename}")?.let { url ->
                     val javaAsZipFile = javaFolder.resolve(url.toExternalForm().substringAfterLast("/")).toFile()
                     val javaWithoutExt = javaFolder.resolve(url.toExternalForm().substringAfterLast("/").substringBeforeLast("."))
