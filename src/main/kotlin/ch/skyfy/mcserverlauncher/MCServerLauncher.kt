@@ -35,10 +35,14 @@ class MCServerLauncher {
         fun any() = Memory(this, -1)
     }
 
+    /**
+     * https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks
+     */
     enum class Flag(
         val fName: String,
         val memory: Memory,
-        val flags: String
+        val flags: String,
+        val compatibleJava: List<Java> = Java.values().toList()
     ) {
 
         // To add maybe -> -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
@@ -82,7 +86,7 @@ class MCServerLauncher {
             -XX:G1HeapRegionSize=8M
             -Dusing.aikars.flags=https://mcflags.emc.gs
             -Daikars.new.flags=true
-        """.trimIndent()
+        """.trimIndent(),
         ),
 
         /**
@@ -459,6 +463,11 @@ class MCServerLauncher {
                 // We also will create a start.bat foreach flags passed in parameters (like one for aikar's Flags, shenandoah Flags, etc.)
                 flags.forEach second@{ flag ->
                     if (flag == Flag.BASICS) return@second
+
+                    if(!flag.compatibleJava.contains(java)){
+                        println("Flags $flag is not compatible with java $java")
+                        return@second
+                    }
 
                     var javaExec = findPathToJavaExe(java.filename.substringBeforeLast("."))
                     if(embedJava)
