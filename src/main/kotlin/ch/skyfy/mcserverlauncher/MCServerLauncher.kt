@@ -484,6 +484,8 @@ class MCServerLauncher {
                         val content = """
                                     cd /d %~dp0../server
                                     
+                                    chcp 65001
+                                    
                                     :loop
                                     "$javaExec" ${flag.updateMemoryAndGetAsSingleLine(mem)} ${Flag.BASICS.getAsSingleLine()} -jar "${fileName.name}" --nogui
                                     
