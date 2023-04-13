@@ -1,8 +1,8 @@
 val javaVersion = JavaVersion.VERSION_19
 
 plugins {
-    kotlin("jvm") version "1.8.10"
-    kotlin("kapt") version "1.8.10"
+    kotlin("jvm") version "1.8.20"
+    kotlin("kapt") version "1.8.20"
     id("application")
 }
 
@@ -24,10 +24,10 @@ dependencies {
     implementation("commons-io:commons-io:2.11.0")
     implementation("net.sourceforge.htmlunit:htmlunit:2.70.0")
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0-RC")
-    implementation("net.lingala.zip4j:zip4j:2.11.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("net.lingala.zip4j:zip4j:2.11.5")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test:1.8.10")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.8.20")
 }
 
 tasks{
