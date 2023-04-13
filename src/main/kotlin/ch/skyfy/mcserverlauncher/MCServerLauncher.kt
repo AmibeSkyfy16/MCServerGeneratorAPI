@@ -220,16 +220,17 @@ class MCServerLauncher {
 
     companion object {
         private val USER_HOME: String = System.getProperty("user.home")
-        private val APPLICATION_DIR: Path = Paths.get(USER_HOME, "MCServerLauncher")
+        val APPLICATION_DIR: Path = Paths.get(USER_HOME, "MCServerLauncher")
+        val BASE_JAVA_FOLDER: Path = APPLICATION_DIR.resolve("java")
 
         private val JAVA_MINECRAFT_COMPATIBILITY = mapOf(
             Pair("17w13a", "21w18a") to "8", // java 8 or greater
             Pair("21w19a", "1.18-pre1") to "16", // java 16 or greater
-            Pair("1.18-pre2", "1.19.4") to "17", // java 17 or greater
+            Pair("1.18-pre2", "23w14a") to "17", // java 17 or greater
         )
 
         val MINECRAFT_VERSIONS = getMinecraftVersion()
-        private val MINECRAFT_VERSIONS_FOR_FABRICMC = getMinecraftVersionForFabricMC()
+        val MINECRAFT_VERSIONS_FOR_FABRICMC = getMinecraftVersionForFabricMC()
         private val FABRICMC_LOADER_VERSION = getFabricLoaderVersion()
         private val FABRICMC_INSTALLER_VERSION = getFabricInstallerVersion()
 
@@ -687,11 +688,38 @@ class MCServerLauncher {
         @JvmStatic
         fun main(args: Array<String>) {
             if (APPLICATION_DIR.notExists()) APPLICATION_DIR.createDirectories()
+            if (BASE_JAVA_FOLDER.notExists()) BASE_JAVA_FOLDER.createDirectories()
 
-            downloadAndExtractAllJava()
+            // Generate a fabric minecraft server with the default value (1.19.4, 0.14.19)
+            ServerGenerator.Builder().build()
+                .generate()
+
+            // Generate multiple fabric minecraft server (one for 1.19.4, another for 1.18.2 and a last one for 1.17.1)
+            ServerGenerator.Builder()
+                .minecraftVersions(listOf("1.19.4", "1.18.2", "1.17.1"))
+                .embedJava(false) // We will use the java that are stored in our application folder
+                .javaVersions(listOf(Java.BELLSOFT_STANDARD_JRE_16_0_2_PLUS_7, Java.BELLSOFT_STANDARD_JRE_17_0_6_PLUS_10)) // Create two different start.bat, one with java 16 and another with java 17
+                .flags(listOf(Flag.DEFAULT)) // Only create a "classic" start.bat (no specific flag like akair's flags, shenandoah, etc.)
+                .memories(setOf("4096")) // Only create a start.bat with 4096MB as memory
+                .build()
+//                .generate()
+
+            // Generate a fabric minecraft server for each minecraft version available on fabric
+            ServerGenerator.Builder()
+//                .minecraftVersions(MINECRAFT_VERSIONS_FOR_FABRICMC)
+                .minecraftVersions(listOf("23w14a"))
+                .embedJava(false)
+                .javaVersions(listOf(Java.BELLSOFT_STANDARD_JRE_8U362_PLUS_9, Java.BELLSOFT_STANDARD_JRE_17_0_6_PLUS_10))
+                .flags(listOf(Flag.DEFAULT))
+                .memories(setOf("4096"))
+                .destinationFolder(Paths.get("C:\\temp\\avril-2023-all-servers"))
+                .build()
+//                .generate()
+
+//            downloadAndExtractAllJava()
 
 //            genSingleServer()
-            generateAllServers()
+//            generateAllServers()
         }
 
 
