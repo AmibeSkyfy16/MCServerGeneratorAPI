@@ -707,12 +707,13 @@ class MCServerLauncher {
             // Generate a fabric minecraft server for each minecraft version available on fabric
             ServerGenerator.Builder()
 //                .minecraftVersions(MINECRAFT_VERSIONS_FOR_FABRICMC)
-                .minecraftVersions(listOf("23w14a"))
-                .embedJava(false)
+//                .minecraftVersions(listOf("23w14a"))
+                .minecraftVersions(listOf("1.19.4"))
+                .embedJava(true)
                 .javaVersions(listOf(Java.BELLSOFT_STANDARD_JRE_8U362_PLUS_9, Java.BELLSOFT_STANDARD_JRE_17_0_6_PLUS_10))
                 .flags(listOf(Flag.DEFAULT))
                 .memories(setOf("4096"))
-                .destinationFolder(Paths.get("C:\\temp\\avril-2023-all-servers"))
+                .destinationFolder(Paths.get("C:\\temp\\juin-2023-all-servers"))
                 .build()
 //                .generate()
 
