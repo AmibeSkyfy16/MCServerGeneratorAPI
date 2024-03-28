@@ -226,7 +226,7 @@ class MCServerLauncher {
         private val JAVA_MINECRAFT_COMPATIBILITY = mapOf(
             Pair("17w13a", "21w18a") to "8", // java 8 or greater
             Pair("21w19a", "1.18-pre1") to "16", // java 16 or greater
-            Pair("1.18-pre2", "23w14a") to "17", // java 17 or greater
+            Pair("1.18-pre2", "24w12a") to "17", // java 17 or greater
         )
 
         val MINECRAFT_VERSIONS = getMinecraftVersion()
