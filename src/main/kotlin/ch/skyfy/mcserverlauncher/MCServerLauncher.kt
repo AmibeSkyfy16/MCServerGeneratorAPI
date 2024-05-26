@@ -162,7 +162,8 @@ class MCServerLauncher {
         BELLSOFT_STANDARD_JRE_16_0_2_PLUS_7("BELLSOFT", "16.0.2+7", "STANDARD-JRE", "bellsoft-jre16.0.2+7-windows-amd64.zip", canUse = { mcVersionToCheck, mcVersionList -> canUse(16, mcVersionToCheck, mcVersionList) }),
         BELLSOFT_STANDARD_JRE_17_0_6_PLUS_10("BELLSOFT", "17.0.6+10", "STANDARD-JRE", "bellsoft-jre17.0.6+10-windows-amd64.zip", canUse = { mcVersionToCheck, mcVersionList -> canUse(17, mcVersionToCheck, mcVersionList) }),
         BELLSOFT_STANDARD_JRE_18_0_2_PLUS_1("BELLSOFT", "18.0.2+1", "STANDARD-JRE", "bellsoft-jre18.0.2.1+1-windows-amd64.zip", canUse = { mcVersionToCheck, mcVersionList -> canUse(18, mcVersionToCheck, mcVersionList) }),
-        BELLSOFT_STANDARD_JRE_19_0_2_PLUS_9("BELLSOFT", "19.0.2+9", "STANDARD-JRE", "bellsoft-jre19.0.2+9-windows-amd64.zip", canUse = { mcVersionToCheck, mcVersionList -> canUse(19, mcVersionToCheck, mcVersionList) });
+        BELLSOFT_STANDARD_JRE_19_0_2_PLUS_9("BELLSOFT", "19.0.2+9", "STANDARD-JRE", "bellsoft-jre19.0.2+9-windows-amd64.zip", canUse = { mcVersionToCheck, mcVersionList -> canUse(19, mcVersionToCheck, mcVersionList) }),
+        BELLSOFT_STANDARD_JRE_21_0_3_PLUS_12("BELLSOFT", "21.0.3+13", "STANDARD-JRE", "bellsoft-jre21.0.3+12-windows-amd64.zip", canUse = { mcVersionToCheck, mcVersionList -> canUse(21, mcVersionToCheck, mcVersionList) });
 
         fun getFormattedName(): String {
             return name.replace("_", "-")
@@ -227,6 +228,7 @@ class MCServerLauncher {
             Pair("17w13a", "21w18a") to "8", // java 8 or greater
             Pair("21w19a", "1.18-pre1") to "16", // java 16 or greater
             Pair("1.18-pre2", "24w12a") to "17", // java 17 or greater
+            Pair("1.20.5", "1.20.6") to "21", // java 21 or greater
         )
 
         val MINECRAFT_VERSIONS = getMinecraftVersion()

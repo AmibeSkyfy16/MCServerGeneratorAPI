@@ -22,8 +22,8 @@ class ServerGenerator private constructor(
 
     data class Builder(
         private var fabricInstallerVersion: String = "1.0.0",
-        private var fabricLoaderVersion: String = "0.15.7",
-        private var minecraftVersions: List<String> = listOf("1.20.4"),
+        private var fabricLoaderVersion: String = "0.15.11",
+        private var minecraftVersions: List<String> = listOf("1.20.1"),
         private var javaVersions: List<MCServerLauncher.Java> = MCServerLauncher.Java.values().toList(),
         private var flags: List<MCServerLauncher.Flag> = MCServerLauncher.Flag.values().toList(),
         private var memories: Set<String> = setOf("4096", "8192", "16384"),
